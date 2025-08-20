@@ -1,108 +1,587 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mod App & YouTube Video</title>
+  <title>Sefe Chat App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
+    :root {
+      --primary: #ffcc00;
+      --primary-dark: #e07b00;
+      --secondary: #ff8c00;
+      --accent: #28a745;
+      --accent-dark: #218838;
+      --background: #fff8dc;
+      --text: #333;
+      --white: #ffffff;
+    }
+    
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      text-align: center;
     }
 
-    header {
-      background-color: #007bff;
-      padding: 20px;
-      color: white;
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--text);
+      overflow-x: hidden;
     }
 
-    .content {
-      padding: 20px;
-    }
-
-    .download-btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 15px 30px;
-      font-size: 18px;
-      color: white;
-      background-color: #28a745;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: 0.3s;
-    }
-
-    .download-btn:hover {
-      opacity: 0.9;
-    }
-
-    .video-container {
-      margin-top: 40px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    iframe {
+    /* Welcome Screen */
+    #welcome-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 450px;
+      height: 100%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 1000;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .welcome-content {
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    #welcome-screen h1 {
+      font-size: 3.5rem;
+      color: var(--white);
+      margin: 0 0 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    #welcome-screen p {
+      font-size: 1.2rem;
+      color: var(--white);
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    #welcome-screen button {
+      margin-top: 20px;
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      background-color: var(--accent);
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    #welcome-screen button:hover {
+      background-color: var(--accent-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    }
+
+    /* Header & Navigation */
+    header {
+      background-color: var(--primary);
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .app-logo {
+      width: 60px;
+      height: 60px;
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--secondary);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .app-title h1 {
+      font-size: 1.8rem;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .app-title p {
+      font-size: 0.9rem;
+      margin: 0;
+      color: var(--text);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: 0.3s;
+      padding: 8px 12px;
+      border-radius: 4px;
+    }
+
+    nav a:hover {
+      color: var(--white);
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    /* Main Layout */
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+
+    .left, .right {
+      background-color: var(--white);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      flex: 1;
+      min-width: 300px;
+      transition: transform 0.3s ease;
+    }
+
+    .left:hover, .right:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      color: var(--secondary);
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    ul.features {
+      list-style: none;
+      padding: 0;
+      font-size: 1.1rem;
+    }
+
+    ul.features li {
+      margin: 15px 0;
+      padding: 10px 15px;
+      border-radius: 8px;
+      background-color: rgba(255, 204, 0, 0.1);
+      transition: transform 0.3s, background-color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    ul.features li:hover {
+      transform: scale(1.02);
+      background-color: rgba(255, 204, 0, 0.2);
+    }
+
+    .guide-steps {
+      margin-top: 30px;
+    }
+
+    .guide-steps p {
+      margin: 12px 0;
+      padding: 10px 15px;
+      border-left: 3px solid var(--secondary);
+      background-color: rgba(255, 140, 0, 0.05);
+    }
+
+    /* Video & Download Section */
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 25px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       border: none;
     }
 
+    .download-section {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+      padding: 15px 35px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+      background-color: var(--accent);
+      text-decoration: none;
+      border-radius: 50px;
+      transition: 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .download-btn:hover {
+      background-color: var(--accent-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 40px;
+      text-align: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .stat-item {
+      padding: 15px;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--secondary);
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    /* Footer */
     footer {
       margin-top: 50px;
-      padding: 20px;
-      background-color: #222;
-      color: #fff;
+      padding: 40px 20px;
+      background-color: var(--primary);
+      color: var(--text);
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 15px 0;
+    }
+
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: var(--white);
+      border-radius: 50%;
+      color: var(--secondary);
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .social-links a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease forwards;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 900px) {
+      .main-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .header-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+      
+      nav ul {
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      
+      #welcome-screen h1 {
+        font-size: 2.5rem;
+      }
+      
+      .stats {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--primary);
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      }
+      
+      nav ul.show {
+        display: flex;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+      }
+      
+      .header-container {
+        padding-right: 60px;
+      }
+      
+      #welcome-screen h1 {
+        font-size: 2rem;
+      }
+      
+      #welcome-screen p {
+        font-size: 1rem;
+        padding: 0 20px;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>📱 Sefe_chat App</h1>
-    <p>Secure Messenger | Free Test Game Video | Download Now</p>
-  </header>
-
-  <div class="content">
-    <h2>🔐 Features:</h2>
-    <ul style="list-style: none; padding: 0; font-size: 18px;">
-      <li>✅ Secure Messaging</li>
-      <li>✅ Group Video Calls</li>
-      <li>✅ 100% Free</li>
-      <li>✅ No Ads</li>
-    </ul>
-
-    <a class="download-btn" href="https://www.mediafire.com/file/uwa03plde3kr5a2/Sefe_chat.apk/file" download>
-      📥 Download APK
-    </a>
-
-    <div class="video-container">
-      <h2 style="margin-top: 40px;">🎬 Watch App Demo:</h2>
-      Embedded YouTube video (auto plays muted)
-      <iframe 
-       src="https://www.youtube.com/embed/z_Dd-fRXWq8"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-      </iframe>
-    </div>
-
-    <div style="margin-top: 40px;">
-      <h2>📲 Installation Guide:</h2>
-      <p>1. Click the green Download button above.</p>
-      <p>2. Allow "Install from Unknown Sources" in Android settings.</p>
-      <p>3. Tap the downloaded APK to install.</p>
+  <!-- Welcome Screen -->
+  <div id="welcome-screen">
+    <div class="welcome-content">
+      <h1>Welcome to Sefe Chat</h1>
+      <p>Secure messaging and free calls with end-to-end encryption. Connect with your loved ones safely.</p>
+      <button onclick="closeWelcome()">Enter App <i class="fas fa-arrow-right"></i></button>
     </div>
   </div>
 
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo-container">
+        <div class="app-logo">
+          <i class="fas fa-comment-alt"></i>
+        </div>
+        <div class="app-title">
+          <h1>Sefe Chat</h1>
+          <p>Secure & Free Messaging | Audio & Video Calls</p>
+        </div>
+      </div>
+      
+      <nav>
+        <button class="mobile-menu-btn" id="mobile-menu-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul id="nav-menu">
+          <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="#"><i class="fas fa-download"></i> Download</a></li>
+          <li><a href="#"><i class="fas fa-feather-alt"></i> Features</a></li>
+          <li><a href="#"><i class="fas fa-question-circle"></i> FAQ</a></li>
+          <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <!-- Left Side: Features & Guide -->
+    <div class="left fade-in">
+      <h2><i class="fas fa-lock"></i> Features</h2>
+      <ul class="features">
+        <li><i class="fas fa-shield-alt"></i> End-to-End Secure Messaging</li>
+        <li><i class="fas fa-phone-alt"></i> Free Audio & Video Calls</li>
+        <li><i class="fas fa-users"></i> Group Chats</li>
+        <li><i class="fas fa-ban"></i> No Ads & 100% Free</li>
+        <li><i class="fas fa-crown"></i> Premium Version Available</li>
+      </ul>
+
+      <div class="guide-steps">
+        <h2><i class="fas fa-mobile-alt"></i> Installation Guide</h2>
+        <p>1. Click the green Download button on the right.</p>
+        <p>2. Enable "Install from Unknown Sources" in Android settings.</p>
+        <p>3. Tap the downloaded APK to install the app.</p>
+      </div>
+    </div>
+
+    <!-- Right Side: Video & Download -->
+    <div class="right fade-in">
+      <h2><i class="fas fa-play-circle"></i> Watch App Demo</h2>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/z_Dd-fRXWq8" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <div class="download-section">
+        <a class="download-btn" href="https://download1584.mediafire.com/zi4f677f71pgjWPfnwMCqmDOxPG9tFnyrWdYqpyZuKMMqEfMPKV4zqD43iJ6rsmanl6bSCbojoZQ7mflWGdNBMbstTWw0dHZzg541DpySgr-fQPTAQ9lwgEa2Vovr-aPqwEKY9dPqrqixyoqf3-6CSK-F91H9zIOe24m-4bY9GC-/bew9ehots572kj4/Sefe_Chat_F.apk" download>
+          <i class="fas fa-download"></i> Download APK
+        </a>
+        <p>Version 1.0 | 15.2 MB | Android 5.0+</p>
+      </div>
+      
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-number">50K+</div>
+          <div class="stat-label">Downloads</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">4.8★</div>
+          <div class="stat-label">Rating</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Secure</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
   <footer>
-    <p>© 2025 Sefe_Chat App | Developed by Students | All Rights Reserved</p>
+    <div class="footer-content">
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+      <p>© 2025 Sefe Chat App | Developed by Students | All Rights Reserved</p>
+      <p>Privacy Policy | Terms of Service | Contact Us</p>
+    </div>
   </footer>
+
+  <script>
+    function closeWelcome() {
+      const screen = document.getElementById('welcome-screen');
+      screen.style.opacity = '0';
+      screen.style.transform = 'scale(1.1)';
+      setTimeout(() => {
+        screen.style.display = 'none';
+      }, 500);
+    }
+    
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+      document.getElementById('nav-menu').classList.toggle('show');
+    });
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const navMenu = document.getElementById('nav-menu');
+      const menuToggle = document.getElementById('mobile-menu-toggle');
+      
+      if (!navMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+        navMenu.classList.remove('show');
+      }
+    });
+    
+    // Add scroll animation
+    document.addEventListener('DOMContentLoaded', function() {
+      const fadeElems = document.querySelectorAll('.fade-in');
+      
+      const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = 1;
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      fadeElems.forEach(elem => {
+        elem.style.opacity = 0;
+        elem.style.transition = 'opacity 0.5s ease-in-out';
+        fadeObserver.observe(elem);
+      });
+    });
+  </script>
 
 </body>
 </html>
-
